@@ -66,4 +66,39 @@ router.delete('/delete', authenticateToken, async (req, res) => {
   }
 });
 
+
+// Rota para obter informações do usuário logado
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const userEmail = req.user.email;
+    console.log('Email recebido:', userEmail);
+
+    console.log('Procurando na coleção:', Usuario.collection.name);
+
+    const usuario = await Usuario.findOne({ email: userEmail });
+    console.log('Usuário completo:', JSON.stringify(usuario, null, 2));
+    console.log('Campos disponíveis:', Object.keys(usuario._doc));
+
+    if (!usuario) {
+      return res.status(404).json({ 
+        mensagem: 'Usuário não encontrado.' 
+      });
+    }
+
+    const resposta = {
+      nome: usuario.nome,
+      email: usuario.email
+    };
+    console.log('Resposta a ser enviada:', resposta);
+
+    res.json(resposta);
+
+  } catch (erro) {
+    console.error('Erro completo:', erro);
+    res.status(500).json({ 
+      mensagem: 'Erro ao buscar informações do usuário.' 
+    });
+  }
+});
+
 module.exports = router;

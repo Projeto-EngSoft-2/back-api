@@ -100,6 +100,10 @@ Body: { nome, email, senha }
 # Deletar próprio usuário
 DELETE /create/delete
 Headers: Authorization: Bearer {token}
+
+# Acessar dados do usuário
+Get /create/me
+Headers: Authorization: Bearer {token}
 ```
 
 ### 📝 Reports (`report.js`)
